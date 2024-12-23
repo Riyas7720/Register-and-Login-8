@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login, Signup, and Dashboard</title>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+          integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" 
+          crossorigin="anonymous"></script>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+        crossorigin="anonymous" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" 
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" 
+        crossorigin="anonymous" rel="stylesheet">
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+          crossorigin="anonymous"></script>
+  <style>
+    <?!= include('style'); ?>
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="modal-box">
+          <!-- Button trigger modal -->
+          <button type="button" id="loginButton" class="btn btn-primary btn-lg show-modal" data-toggle="modal" data-target="#loginModal">
+            Login
+          </button>
+
+          <!-- Login Modal -->
+          <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content clearfix">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                  <div class="modal-icon">
+                    <i class="fas fa-desktop"></i>
+                  </div>
+                  <h3 class="title">Hello User! <span>Welcome back :)</span></h3>
+                  <form id="loginForm">
+                    <div class="form-group">
+                      <input type="text" id="loginUsername" class="form-control" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <ul>
+                    <a href="#" data-toggle="modal" data-target="#signupModal" data-dismiss="modal">Sign Up</a>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sign Up Modal -->
+          <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content clearfix">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                  <div class="modal-icon">
+                    <i class="fas fa-user-plus"></i>
+                  </div>
+                  <h3 class="title">Create Account <span>Join us today!</span></h3>
+                  <form id="signupForm">
+                    <div class="form-group">
+                      <input type="text" id="signupFullName" class="form-control" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="email" id="signupEmail" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" id="signupUsername" class="form-control" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="password" id="signupPassword" class="form-control" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn">Sign Up</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Dashboard Modal -->
+          <div class="modal fade" id="dashboardModal" tabindex="-1" role="dialog" aria-labelledby="dashboardModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content clearfix">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                  <div class="modal-icon">
+                    <i class="fas fa-user-plus"></i>
+                  </div>
+                  <form id="dashboardForm">
+                    <div id="mainFormContainer" class="dashboard">
+                      <div class="content3">
+                        <h1>Welcome to the Dashboard!</h1>
+                            <p>You are successfully logged in.</p>
+                          <button id="logoutButton" class="btn btn-danger" style="width: 200px; height: 40px; background-color: red;">Logout</button>
+                        </div>
+                      </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+  // Login Form Handler
+  document.getElementById('loginForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+
+    // Mock login response
+    const response = { success: true }; // Replace with actual server-side validation
+
+    loginResponse(response);
+  });
+});
+
+  function loginResponse(response) {
+    if (response.success) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Login Successful!',
+        text: 'Welcom to Dashboard.'
+      });
+      document.getElementById('loginForm').reset();
+      $('#loginModal').modal('hide');
+      $('#dashboardModal').modal('show');
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: response.message
+      });
+    }
+  }
+
+  // Signup Form Handler
+  document.getElementById('signupForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const fullname = document.getElementById('signupFullName').value;
+    const email = document.getElementById('signupEmail').value;
+    const username = document.getElementById('signupUsername').value;
+    const password = document.getElementById('signupPassword').value;
+
+    // Mock signup response
+    const response = { success: true }; // Replace with actual server-side logic
+
+    signupResponse(response);
+  });
+
+  function signupResponse(response) {
+    if (response.success) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Signup Successful!',
+        text: 'Please log in now.'
+      });
+      document.getElementById('signupForm').reset();
+      $('#signupModal').modal('hide');
+      $('#loginModal').modal('show');
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Signup Failed',
+        text: response.message
+      });
+    }
+  }
+
+  document.getElementById("logoutButton").addEventListener("click", function (e) {
+    e.preventDefault();
+    Swal.fire({
+        icon: 'info',
+        title: 'Logging Out...',
+        timer: 1000,
+        showConfirmButton: false
+      });
+      document.getElementById('loginForm').reset();
+      $('#dashboardModal').modal('hide');
+      $('#loginModal').modal('show');
+  });
+
+  </script>
+</body>
+</html>
