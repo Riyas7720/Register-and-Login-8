@@ -130,19 +130,13 @@
 
   <script>
 
-  document.addEventListener('DOMContentLoaded', function() {
-  // Login Form Handler
   document.getElementById('loginForm').addEventListener('submit', function (event) {
     event.preventDefault();
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
 
-    // Mock login response
-    const response = { success: true }; // Replace with actual server-side validation
-
-    loginResponse(response);
+    google.script.run.withSuccessHandler(loginResponse).processLogin(username, password);
   });
-});
 
   function loginResponse(response) {
     if (response.success) {
@@ -171,10 +165,7 @@
     const username = document.getElementById('signupUsername').value;
     const password = document.getElementById('signupPassword').value;
 
-    // Mock signup response
-    const response = { success: true }; // Replace with actual server-side logic
-
-    signupResponse(response);
+    google.script.run.withSuccessHandler(signupResponse).processSignup(fullname, email, username, password);
   });
 
   function signupResponse(response) {
